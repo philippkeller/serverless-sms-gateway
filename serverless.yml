@@ -1,0 +1,31 @@
+service: sms-gateway
+
+provider:
+  name: aws
+  runtime: python3.6
+  environment:
+    TWILIO_ACCOUNT_SID: "${self:custom.secrets.TWILIO_ACCOUNT_SID}"
+    TWILIO_AUTH_TOKEN: "${self:custom.secrets.TWILIO_AUTH_TOKEN}"
+    TWILIO_TO: "${self:custom.secrets.TWILIO_TO}"
+    TWILIO_VALID_FROM: "${self:custom.secrets.TWILIO_VALID_FROM}"
+
+package:
+  exclude:
+    - secrets.yml
+
+functions:
+  sms:
+    handler: handler.sms
+    events:
+        - http:
+            method: post
+            path: sms
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  secrets: ${file(secrets.yml):${self:custom.stage}}
+  pythonRequirements:
+    dockerizePip: true # for serverless-python-requirements
