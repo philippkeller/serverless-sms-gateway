@@ -3,6 +3,7 @@ import json
 def sms(event, context):
     from twilio.rest import Client
     from urllib import parse
+    import os
     
     account_sid = os.environ['TWILIO_ACCOUNT_SID']
     auth_token  = os.environ['TWILIO_AUTH_TOKEN']
