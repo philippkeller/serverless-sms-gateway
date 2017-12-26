@@ -16,7 +16,7 @@ package:
 
 functions:
   sms:
-    handler: handler.sms
+    handler: handler.sms_handler
     events:
         - http:
             method: post

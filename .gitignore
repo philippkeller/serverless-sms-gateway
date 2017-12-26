@@ -1,5 +1,7 @@
 .serverless
 node_modules
 venv
+__pycache__
 
 secrets.yml
+people-api-secret.json

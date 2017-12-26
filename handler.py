@@ -1,22 +1,13 @@
 import json
+from urllib import parse
+import os
 
-def sms(event, context):
-    from twilio.rest import Client
-    from urllib import parse
-    import os
-    
-    account_sid = os.environ['TWILIO_ACCOUNT_SID']
-    auth_token  = os.environ['TWILIO_AUTH_TOKEN']
-    to = os.environ['TWILIO_TO']
-    valid_from = [t.strip() for t in os.environ['TWILIO_VALID_FROM'].split(",")]
-    print(valid_from)
-
+def sms_handler(event, context):
+    import sms
+    # gotten sms, at the moment just send the same sms back
+    print(event)
     params = parse.parse_qs(event['body'])
     body = params['Body'][0]
     from_number = params['From'][0]
-
-    client = Client(account_sid, auth_token)
-    message = client.messages.create(
-        to=from_number, 
-        from_=to,
-        body="Got body {}".format(body))
+    to_number = os.environ['TWILIO_TO']
+    sms.send(to_number, from_number, "testi--" + body)
