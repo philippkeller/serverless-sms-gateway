@@ -9,5 +9,4 @@ def sms_handler(event, context):
     params = parse.parse_qs(event['body'])
     body = params['Body'][0]
     from_number = params['From'][0]
-    to_number = os.environ['TWILIO_TO']
-    sms.send(to_number, from_number, "testi--" + body)
+    sms.send(from_number, "testi--" + body)
