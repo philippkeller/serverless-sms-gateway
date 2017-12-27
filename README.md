@@ -25,5 +25,12 @@ vim secrets.yml # put in twilio secret etc.
 
 # Deployment
 
+- Delete __pycache__: `rm -rf __pycache__` (see [here](https://github.com/UnitedIncome/serverless-python-requirements/issues/54))
 - Deploy to prod: `serverless deploy --stage prod`
 - See logs: `sls logs --stage prod -f sms -t`
+
+# Local testing
+
+```
+sls invoke local --function sms --data '{"body":"From=MY_NUMBER&Body=SMS_BODY"}'
+```

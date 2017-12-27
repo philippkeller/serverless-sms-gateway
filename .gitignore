@@ -4,4 +4,4 @@ venv
 __pycache__
 
 secrets.yml
-people-api-secret.json
+client_secret.json
