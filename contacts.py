@@ -11,8 +11,23 @@ def birthday_today():
     my contacts list which have birthday today.
     """
 
-    access_token = os.environ['GOOGLE_PEOPLE_ACCESS_TOKEN']
-    credentials = client.AccessTokenCredentials(access_token, 'sms-proxy')
+
+    # because access token expires in 3600 seconds (which is 1 hour), we also need
+    # to provide the refresh token and refresh token expiry, see
+    # https://stackoverflow.com/a/37418906/119861
+    client_id = os.environ['GOOGLE_PEOPLE_CLIENT_ID']
+    client_secret = os.environ['GOOGLE_PEOPLE_CLIENT_SECRET']
+    refresh_token = os.environ['GOOGLE_PEOPLE_REFRESH_TOKEN']
+    credentials = client.GoogleCredentials(None, 
+        client_id, 
+        client_secret,
+        refresh_token,
+        None,
+        "https://accounts.google.com/o/oauth2/token",
+        'sms-proxy')
+
+
+    # credentials = client.AccessTokenCredentials(access_token, 'sms-proxy')
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('people', 'v1', http=http,
         discoveryServiceUrl='https://people.googleapis.com/$discovery/rest',
