@@ -5,7 +5,7 @@ provider:
   runtime: python3.6
   region: eu-central-1
   environment: ${file(secrets.yml):${self:custom.stage}}
-  timeout: 99
+  timeout: 300
   versionFunctions: false
 
 package:

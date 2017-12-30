@@ -4,22 +4,18 @@ import os
 def get_sonos_device(internal_ip, external_hostname, port):
     import socket
     external_ip = socket.gethostbyname(external_hostname)
-    print('1')
 
     # needs internal ip address for "is_master_of_group" check
     s = soco.SoCo(internal_ip)
-    print('2')
 
     # replace port
     url = 'http://{}:{}'.format(external_ip, port)
-    print('3')
     s.music_library.contentDirectory.base_url = url
-    print('4')
     s.avTransport.base_url = url
-    print('5')
     s.zoneGroupTopology.base_url = url
-    print('6')
-
+    s.speaker_info = dict(foo='bar') # hack to make socos.speaker_info() 
+                                     # not try to make the call to internal_ip
+    s.refresh = False
     return s
 
 def replace_album(device, search_term):
@@ -48,7 +44,6 @@ def dispatcher(cmd):
         external_port, internal_ip, search_terms = line.split(':')
         search_terms = search_terms.lower().split(' ')
         if device in search_terms:
-            print("found! {}".format(line))
             s = get_sonos_device(internal_ip, external_hostname, external_port)
 
     if s:
