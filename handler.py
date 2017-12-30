@@ -8,7 +8,12 @@ def sms_handler(event, context):
     params = parse.parse_qs(event['body'])
     body = params['Body'][0]
     from_number = params['From'][0]
-    sms.send(from_number, "testi--" + body)
+    if body.startswith("so"):
+        import sonos
+        sonos.dispatcher(body.split(' ', 1)[1])
+    else:
+        import sms
+        sms.send(from_number, "unknown command: " + body)
 
 def birthday_handler(event, context):
     import contacts
@@ -18,3 +23,4 @@ def birthday_handler(event, context):
         body = "\n".join(res)
         twilio_number = os.environ['TWILIO_NOTIFICATIONS']
         sms.send(twilio_number, body)
+

@@ -4,16 +4,7 @@ provider:
   name: aws
   runtime: python3.6
   region: eu-central-1
-  environment:
-    TWILIO_ACCOUNT_SID: "${self:custom.secrets.TWILIO_ACCOUNT_SID}"
-    TWILIO_AUTH_TOKEN: "${self:custom.secrets.TWILIO_AUTH_TOKEN}"
-    TWILIO_REGISTERED_NUMBER: "${self:custom.secrets.TWILIO_REGISTERED_NUMBER}"
-    TWILIO_VALID_FROM: "${self:custom.secrets.TWILIO_VALID_FROM}"
-    TWILIO_NOTIFICATIONS: "${self:custom.secrets.TWILIO_NOTIFICATIONS}"
-
-    GOOGLE_PEOPLE_CLIENT_ID: "${self:custom.secrets.GOOGLE_PEOPLE_CLIENT_ID}"
-    GOOGLE_PEOPLE_CLIENT_SECRET: "${self:custom.secrets.GOOGLE_PEOPLE_CLIENT_SECRET}"
-    GOOGLE_PEOPLE_REFRESH_TOKEN: "${self:custom.secrets.GOOGLE_PEOPLE_REFRESH_TOKEN}"
+  environment: ${file(secrets.yml):${self:custom.stage}}
 
 package:
   exclude:
@@ -31,12 +22,13 @@ functions:
     handler: handler.birthday_handler
     events:
       - schedule: cron(0 7 * * ? *)
+  sonos:
+    handler: handler.sonos_handler
 
 plugins:
   - serverless-python-requirements
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  secrets: ${file(secrets.yml):${self:custom.stage}}
   pythonRequirements:
     dockerizePip: true # for serverless-python-requirements
