@@ -6,7 +6,7 @@ def sms_handler(event, context):
     import sms
     # gotten sms, at the moment just send the same sms back
     params = parse.parse_qs(event['body'])
-    body = params['Body'][0]
+    body = params['Body'][0].lower()
     from_number = params['From'][0]
     if body.startswith("so"):
         import sonos

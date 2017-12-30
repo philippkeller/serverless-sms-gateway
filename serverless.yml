@@ -5,6 +5,8 @@ provider:
   runtime: python3.6
   region: eu-central-1
   environment: ${file(secrets.yml):${self:custom.stage}}
+  timeout: 99
+  versionFunctions: false
 
 package:
   exclude:
@@ -22,8 +24,6 @@ functions:
     handler: handler.birthday_handler
     events:
       - schedule: cron(0 7 * * ? *)
-  sonos:
-    handler: handler.sonos_handler
 
 plugins:
   - serverless-python-requirements
