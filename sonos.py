@@ -34,8 +34,12 @@ def replace_alarm(device, time):
     a.save()
 
 
-def replace_album(device, search_term):
-    res = device.music_library.get_music_library_information('albums', search_term=search_term)
+def replace_queue(device, search_term):
+    res = []
+    for t in ['albums', 'playlists', 'artists', 'tracks']:
+        res = device.music_library.get_music_library_information(t, search_term=search_term)
+        if len(res) > 0:
+            break
     device.clear_queue()
     for r in res:
         device.add_to_queue(r)
@@ -64,7 +68,7 @@ def dispatcher(cmd):
 
     if s:
         if action in ['r', 're', 'replace']:
-            replace_album(s, rest)
+            replace_queue(s, rest)
         elif action in ['al', 'alarm']:
             replace_alarm(s, rest)
 
